@@ -1,0 +1,204 @@
+<section class="hero">
+  <div>
+    <p class="eyebrow">{{ now() | date: 'EEEE, d MMMM' : '' : locale() }}</p>
+    <h1>
+      {{ greeting() }}@if (name()) {, {{ name() }}
+      }
+    </h1>
+    <p class="lede">{{ i18n.t('tagline') }}</p>
+  </div>
+  <div class="hero-meta">
+    <div class="stat">
+      <strong>{{ todayCount() }}</strong>
+      <span>{{ i18n.t('todayCount') }}</span>
+    </div>
+    <div class="stat">
+      <strong>{{ events.openEvents().length }}</strong>
+      <span>{{ i18n.t('openEvents') }}</span>
+    </div>
+  </div>
+</section>
+
+@if (focus(); as live) {
+  <section class="next live-now">
+    <p class="eyebrow">{{ i18n.t('focusNow') }}</p>
+    <div class="next-row">
+      <div>
+        <h2>{{ live.name }}</h2>
+        <p>{{ live.location || live.description || live.category }}</p>
+      </div>
+      <div class="count">
+        <strong>{{ i18n.t('now') }}</strong>
+      </div>
+    </div>
+  </section>
+} @else {
+  <section class="next" [class.empty]="!next()">
+    @if (next(); as event) {
+      <p class="eyebrow">{{ i18n.t('nextUp') }}</p>
+      <div class="next-row">
+        <div>
+          <h2>{{ event.name }}</h2>
+          <p>{{ event.location || event.description || event.category }}</p>
+        </div>
+        @if (countdown(); as count) {
+          <div class="count">
+            @if (count.label !== i18n.t('now')) {
+              <span>{{ i18n.t('in') }}</span>
+            }
+            <strong>{{ count.label }}</strong>
+          </div>
+        }
+      </div>
+    } @else {
+      <p class="eyebrow">{{ i18n.t('nextUp') }}</p>
+      <h2>{{ i18n.t('noUpcoming') }}</h2>
+      <p>{{ i18n.t('noUpcomingHint') }}</p>
+    }
+  </section>
+}
+
+<app-insights
+  [completion]="stats().completion"
+  [bars]="stats().bars"
+  [categories]="stats().categories"
+/>
+
+<div class="toolbar">
+  <label class="search">
+    <span class="sr-only">{{ i18n.t('search') }}</span>
+    <input
+      type="search"
+      [ngModel]="query()"
+      (ngModelChange)="query.set($event)"
+      [placeholder]="i18n.t('searchPlaceholder')"
+    />
+  </label>
+  <div class="view-switch">
+    @for (mode of views; track mode) {
+      <button type="button" [class.active]="view() === mode" (click)="view.set(mode)">
+        {{ viewLabel(mode) }}
+      </button>
+    }
+  </div>
+  <button type="button" class="primary-btn" (click)="editor.add()">{{ i18n.t('addEvent') }}</button>
+</div>
+
+<div class="layout" cdkDropListGroup>
+  <aside class="panel">
+    <p class="eyebrow">{{ i18n.t('selectDate') }}</p>
+    <app-calendar
+      [(selected)]="selected"
+      [marked]="marked()"
+      [locale]="locale()"
+      (dropped)="reschedule($event)"
+    />
+    <p class="hint">{{ i18n.t('dragHint') }}</p>
+  </aside>
+
+  <div class="stack">
+    @if (view() === 'week') {
+      <section class="panel week-wrap">
+        <app-week-board
+          [selected]="selected()"
+          [events]="events.openEvents()"
+          [now]="now()"
+          [locale]="locale()"
+          (pick)="selected.set($event)"
+          (openEvent)="editor.edit($event)"
+          (createAt)="editor.addAt({ startDate: $event.date, startTime: $event.time })"
+        />
+      </section>
+    }
+
+    @if (view() === 'agenda') {
+      <section>
+        <header class="section-head">
+          <h2>{{ i18n.t('agendaView') }}</h2>
+        </header>
+        @if (agenda().length === 0) {
+          <div class="empty">
+            <h3>{{ i18n.t('allClear') }}</h3>
+            <p>{{ i18n.t('allClearHint') }}</p>
+          </div>
+        } @else {
+          @for (group of agenda(); track group.date) {
+            <h3 class="agenda-day">{{ group.date | date: 'EEEE, MMM d' : '' : locale() }}</h3>
+            <div class="cards">
+              @for (event of group.items; track event.id) {
+                <app-event-card
+                  [event]="event"
+                  [now]="now()"
+                  [locale]="locale()"
+                  (edit)="editor.edit($event)"
+                  (remove)="remove($event)"
+                  (toggle)="toggle($event)"
+                />
+              }
+            </div>
+          }
+        }
+      </section>
+    }
+
+    @if (view() === 'month') {
+      <section>
+        <header class="section-head">
+          <h2>{{ i18n.t('dailyEvents') }} {{ selected() | date: 'MMM d' : '' : locale() }}</h2>
+        </header>
+        @if (daily().length === 0) {
+          <div class="empty">
+            <h3>{{ i18n.t('allClear') }}</h3>
+            <p>{{ i18n.t('allClearHint') }}</p>
+          </div>
+        } @else {
+          <div class="cards">
+            @for (event of daily(); track event.id) {
+              <app-event-card
+                [event]="event"
+                [now]="now()"
+                [locale]="locale()"
+                (edit)="editor.edit($event)"
+                (remove)="remove($event)"
+                (toggle)="toggle($event)"
+              />
+            }
+          </div>
+        }
+      </section>
+    }
+
+    <section>
+      <header class="section-head">
+        <h2>{{ i18n.t('upcoming') }}</h2>
+      </header>
+      @if (events.events().length === 0) {
+        <div class="empty">
+          <h3>{{ i18n.t('emptySchedule') }}</h3>
+          <p>{{ i18n.t('emptyScheduleHint') }}</p>
+          <button type="button" class="ghost-btn" (click)="seed()">{{ i18n.t('sampleWeek') }}</button>
+        </div>
+      } @else if (upcoming().length === 0) {
+        <div class="empty">
+          <h3>{{ i18n.t('noUpcoming') }}</h3>
+          <p>{{ i18n.t('noUpcomingHint') }}</p>
+        </div>
+      } @else {
+        <div class="cards">
+          @for (event of upcoming(); track event.id) {
+            <app-event-card
+              [event]="event"
+              [now]="now()"
+              [locale]="locale()"
+              (edit)="editor.edit($event)"
+              (remove)="remove($event)"
+              (toggle)="toggle($event)"
+            />
+          }
+        </div>
+      }
+    </section>
+  </div>
+</div>
+
+<button type="button" class="fab" (click)="editor.add()">{{ i18n.t('addEvent') }}</button>

@@ -1,0 +1,52 @@
+<div class="week">
+  <div class="week-head">
+    <span></span>
+    @for (day of days(); track iso(day)) {
+      <button
+        type="button"
+        class="day-label"
+        [class.today]="iso(day) === today()"
+        [class.selected]="iso(day) === selected()"
+        (click)="pick.emit(iso(day))"
+      >
+        <small>{{ day | date: 'EEE' : '' : locale() }}</small>
+        <strong>{{ day | date: 'd' : '' : locale() }}</strong>
+      </button>
+    }
+  </div>
+
+  <div class="week-grid">
+    <div class="hours">
+      @for (hour of hours; track hour) {
+        <span>{{ slotTime(hour) }}</span>
+      }
+    </div>
+    @for (day of days(); track iso(day)) {
+      <div class="col" (click)="pick.emit(iso(day))">
+        @for (hour of hours; track hour) {
+          <button
+            type="button"
+            class="slot"
+            (click)="createAt.emit({ date: iso(day), time: slotTime(hour) }); $event.stopPropagation()"
+          ></button>
+        }
+        @if (showNow(day)) {
+          <div class="now-line" [style.top.px]="nowTop()"></div>
+        }
+        @for (event of eventsFor(day); track event.id) {
+          <button
+            type="button"
+            class="block"
+            [attr.data-category]="event.category"
+            [attr.data-priority]="event.priority"
+            [style]="styleFor(event)"
+            (click)="openEvent.emit(event); $event.stopPropagation()"
+          >
+            <strong>{{ event.name }}</strong>
+            <span>{{ event.startTime }}</span>
+          </button>
+        }
+      </div>
+    }
+  </div>
+</div>

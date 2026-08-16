@@ -1,0 +1,31 @@
+import { signal } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
+import { App } from './app';
+import { ClockService } from './core/services/clock';
+import { NotifyService } from './core/services/notify';
+
+describe('App', () => {
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [App],
+      providers: [
+        provideRouter([]),
+        { provide: ClockService, useValue: { now: signal(new Date()), start() {} } },
+        { provide: NotifyService, useValue: { start() {}, supported: false, permission: 'unsupported' } },
+      ],
+    }).compileComponents();
+  });
+
+  it('should create the app', () => {
+    const fixture = TestBed.createComponent(App);
+    expect(fixture.componentInstance).toBeTruthy();
+  });
+
+  it('should render the brand', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('.brand')?.textContent).toContain('Online Organizer');
+  });
+});

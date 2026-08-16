@@ -1,0 +1,37 @@
+<div class="cal">
+  <header class="cal-head">
+    <div>
+      <p class="eyebrow">{{ monthLabel() | date: 'yyyy' : '' : locale() }}</p>
+      <h2>{{ monthLabel() | date: 'MMMM' : '' : locale() }}</h2>
+    </div>
+    <div class="cal-nav">
+      <button type="button" class="icon-btn" (click)="prev()" aria-label="Previous month">‹</button>
+      <button type="button" class="text-btn" (click)="goToday()">Today</button>
+      <button type="button" class="icon-btn" (click)="next()" aria-label="Next month">›</button>
+    </div>
+  </header>
+
+  <div class="cal-week">
+    @for (day of weekdays(); track day) {
+      <span>{{ day }}</span>
+    }
+  </div>
+
+  <div class="cal-grid">
+    @for (day of days(); track iso(day)) {
+      <div
+        class="cal-day"
+        [class.outside]="isOutside(day)"
+        [class.today]="iso(day) === today"
+        [class.selected]="isSelected(day)"
+        [class.marked]="marked().has(iso(day))"
+        cdkDropList
+        [cdkDropListData]="iso(day)"
+        (cdkDropListDropped)="onDrop($event)"
+        (click)="pick(day)"
+      >
+        <span>{{ day.getDate() }}</span>
+      </div>
+    }
+  </div>
+</div>

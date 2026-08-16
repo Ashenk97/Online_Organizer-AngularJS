@@ -1,0 +1,81 @@
+<section class="page-head">
+  <p class="eyebrow">{{ i18n.t('profile') }}</p>
+  <h1>{{ i18n.t('stats') }}</h1>
+  <p class="lede">{{ i18n.t('about') }}</p>
+</section>
+
+<div class="stats">
+  <article>
+    <strong>{{ stats().total }}</strong>
+    <span>{{ i18n.t('totalEvents') }}</span>
+  </article>
+  <article>
+    <strong>{{ stats().open }}</strong>
+    <span>{{ i18n.t('openEvents') }}</span>
+  </article>
+  <article>
+    <strong>{{ stats().done }}</strong>
+    <span>{{ i18n.t('doneEvents') }}</span>
+  </article>
+  <article>
+    <strong>{{ stats().week }}</strong>
+    <span>{{ i18n.t('thisWeek') }}</span>
+  </article>
+</div>
+
+<section class="panel">
+  <label>
+    <span>{{ i18n.t('displayName') }}</span>
+    <input type="text" [ngModel]="name()" (ngModelChange)="name.set($event)" maxlength="40" />
+    <small>{{ i18n.t('displayNameHint') }}</small>
+  </label>
+  <button type="button" class="primary-btn" (click)="saveName()">{{ i18n.t('save') }}</button>
+</section>
+
+<section class="panel">
+  <h2>{{ i18n.t('language') }}</h2>
+  <div class="pills">
+    <button type="button" [class.active]="prefs.prefs().lang === 'en'" (click)="setLang('en')">
+      {{ i18n.t('english') }}
+    </button>
+    <button type="button" [class.active]="prefs.prefs().lang === 'si'" (click)="setLang('si')">
+      {{ i18n.t('sinhala') }}
+    </button>
+  </div>
+</section>
+
+<section class="panel">
+  <h2>{{ i18n.t('theme') }}</h2>
+  <div class="pills">
+    <button type="button" [class.active]="prefs.prefs().theme === 'dark'" (click)="setTheme('dark')">
+      {{ i18n.t('dark') }}
+    </button>
+    <button type="button" [class.active]="prefs.prefs().theme === 'light'" (click)="setTheme('light')">
+      {{ i18n.t('light') }}
+    </button>
+  </div>
+</section>
+
+<section class="panel">
+  <h2>{{ i18n.t('notifications') }}</h2>
+  <p>
+    {{ permission() === 'granted' ? i18n.t('notificationsOn') : i18n.t('notificationsOff') }}
+  </p>
+  <button type="button" class="ghost-btn" (click)="enableNotify()">
+    {{ i18n.t('enableNotifications') }}
+  </button>
+</section>
+
+<section class="panel">
+  <h2>{{ i18n.t('data') }}</h2>
+  <p>{{ i18n.t('dataHint') }}</p>
+  <div class="pills">
+    <button type="button" class="ghost-btn" (click)="exportJson()">{{ i18n.t('exportJson') }}</button>
+    <button type="button" class="ghost-btn" (click)="exportIcs()">{{ i18n.t('exportIcs') }}</button>
+    <label class="ghost-btn file-btn">
+      {{ i18n.t('importJson') }}
+      <input type="file" accept="application/json" (change)="importFile($event)" />
+    </label>
+  </div>
+  <button type="button" class="ghost-btn danger" (click)="clear()">{{ i18n.t('clearData') }}</button>
+</section>

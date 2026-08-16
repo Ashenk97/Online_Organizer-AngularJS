@@ -1,0 +1,105 @@
+@if (editor.open()) {
+  <div class="overlay" (click)="editor.close()">
+    <section class="sheet" (click)="$event.stopPropagation()" role="dialog" aria-modal="true">
+      <header>
+        <p class="eyebrow">{{ i18n.t('brand') }}</p>
+        <h2>{{ editor.editing() ? i18n.t('editEvent') : i18n.t('addEvent') }}</h2>
+      </header>
+
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <label>
+          <span>{{ i18n.t('eventName') }}</span>
+          <input formControlName="name" type="text" maxlength="80" />
+          @if (form.controls.name.touched && form.controls.name.invalid) {
+            <em>{{ i18n.t('nameRequired') }}</em>
+          }
+        </label>
+
+        <label>
+          <span>{{ i18n.t('description') }}</span>
+          <textarea formControlName="description" rows="2" maxlength="240"></textarea>
+        </label>
+
+        <div class="split">
+          <label>
+            <span>{{ i18n.t('startDate') }}</span>
+            <input formControlName="startDate" type="date" />
+            @if (form.controls.startDate.touched && form.controls.startDate.invalid) {
+              <em>{{ i18n.t('dateRequired') }}</em>
+            }
+          </label>
+          <label>
+            <span>{{ i18n.t('endDate') }}</span>
+            <input formControlName="endDate" type="date" />
+            @if (form.controls.endDate.touched && form.controls.endDate.invalid) {
+              <em>{{ i18n.t('dateRequired') }}</em>
+            }
+          </label>
+        </div>
+
+        <div class="split">
+          <label>
+            <span>{{ i18n.t('startTime') }}</span>
+            <input formControlName="startTime" type="time" />
+            @if (form.controls.startTime.touched && form.controls.startTime.invalid) {
+              <em>{{ i18n.t('timeRequired') }}</em>
+            }
+          </label>
+          <label>
+            <span>{{ i18n.t('endTime') }}</span>
+            <input formControlName="endTime" type="time" />
+            @if (form.controls.endTime.touched && form.controls.endTime.invalid) {
+              <em>{{ i18n.t('timeRequired') }}</em>
+            }
+          </label>
+        </div>
+
+        @if (form.errors?.['dateRange']) {
+          <em>{{ i18n.t('dateRange') }}</em>
+        }
+        @if (form.errors?.['timeRange']) {
+          <em>{{ i18n.t('timeRange') }}</em>
+        }
+
+        <label>
+          <span>{{ i18n.t('location') }}</span>
+          <input formControlName="location" type="text" maxlength="80" />
+        </label>
+
+        <fieldset>
+          <legend>{{ i18n.t('priority') }}</legend>
+          <div class="cats">
+            @for (priority of priorities; track priority) {
+              <label class="cat">
+                <input type="radio" formControlName="priority" [value]="priority" />
+                <span>{{ i18n.t(priority) }}</span>
+              </label>
+            }
+          </div>
+        </fieldset>
+
+        <label class="check">
+          <input type="checkbox" formControlName="remind" />
+          <span>{{ i18n.t('remind') }}</span>
+        </label>
+
+        <fieldset>
+          <legend>{{ i18n.t('category') }}</legend>
+          <div class="cats">
+            @for (category of categories; track category) {
+              <label class="cat" [attr.data-category]="category">
+                <input type="radio" formControlName="category" [value]="category" />
+                <span>{{ i18n.t(category) }}</span>
+              </label>
+            }
+          </div>
+        </fieldset>
+
+        <div class="actions">
+          <button type="button" class="ghost-btn" (click)="editor.close()">{{ i18n.t('cancel') }}</button>
+          <button type="submit" class="primary-btn">{{ i18n.t('save') }}</button>
+        </div>
+      </form>
+    </section>
+  </div>
+}

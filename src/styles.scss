@@ -1,0 +1,156 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560;9..144,700&family=Outfit:wght@400;500;650;700&display=swap');
+
+:root {
+  --bg: #10151c;
+  --surface: #18212b;
+  --surface-2: #1f2a36;
+  --text: #f4efe6;
+  --muted: #9aa8b5;
+  --faint: #667380;
+  --line: #2b3846;
+  --accent: #ff7a59;
+  --accent-2: #7dd3c0;
+  --work: #7eb0ff;
+  --personal: #f5c06a;
+  --health: #7dd3a0;
+  --other: #c4b5fd;
+  --danger: #ff8b7a;
+  --ok: #8ee0b0;
+  --radius: 18px;
+  --shadow: 0 12px 40px #0005;
+  --shadow-lg: 0 24px 70px #0007;
+  --font: 'Outfit', sans-serif;
+  --font-display: 'Fraunces', serif;
+}
+
+:root[data-theme='light'] {
+  --bg: #f6f1e8;
+  --surface: #fffaf3;
+  --surface-2: #fff;
+  --text: #1b2430;
+  --muted: #5d6b78;
+  --faint: #9aa6b2;
+  --line: #e4d9c8;
+  --accent: #e25a38;
+  --shadow: 0 10px 30px #1b243014;
+  --shadow-lg: 0 20px 50px #1b24301f;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  background:
+    radial-gradient(circle at 12% -10%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 32%),
+    radial-gradient(circle at 90% 0%, color-mix(in srgb, var(--accent-2) 16%, transparent), transparent 28%),
+    var(--bg);
+  color: var(--text);
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.18;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 650;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+.eyebrow {
+  margin: 0;
+  color: var(--accent-2);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.18rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: color-mix(in srgb, var(--text) 8%, transparent);
+}
+
+.primary-btn,
+.ghost-btn,
+.text-btn,
+.icon-btn {
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+}
+
+.primary-btn,
+.ghost-btn {
+  border-radius: 999px;
+  padding: 0.7rem 1rem;
+}
+
+.primary-btn {
+  background: var(--accent);
+  color: #1a100c;
+  font-weight: 700;
+}
+
+.ghost-btn,
+.icon-btn {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--line);
+}
+
+.ghost-btn.danger,
+.text-btn.danger {
+  color: var(--danger);
+}
+
+.icon-btn,
+.text-btn {
+  border-radius: 999px;
+}
+
+.icon-btn {
+  width: 2.1rem;
+  height: 2.1rem;
+}
+
+.text-btn {
+  padding: 0.3rem 0.55rem;
+  background: transparent;
+  color: var(--muted);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}

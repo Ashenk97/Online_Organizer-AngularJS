@@ -1,0 +1,67 @@
+<div class="app-shell">
+  <header class="topbar">
+    <a routerLink="/" class="brand">
+      <span class="mark" aria-hidden="true"></span>
+      <span>
+        <strong>{{ i18n.t('brand') }}</strong>
+        <small>{{ now() | date: 'HH:mm:ss' }}</small>
+      </span>
+    </a>
+
+    <nav class="desk-nav">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        {{ i18n.t('home') }}
+      </a>
+      <a routerLink="/completed" routerLinkActive="active">{{ i18n.t('completed') }}</a>
+      <a routerLink="/profile" routerLinkActive="active">{{ i18n.t('profile') }}</a>
+      <button type="button" class="ghost-btn cmd" (click)="commands.show()">
+        {{ i18n.t('command') }}
+        <kbd>K</kbd>
+      </button>
+    </nav>
+  </header>
+
+  <main>
+    <router-outlet />
+  </main>
+</div>
+
+<nav class="bottom-nav" aria-label="Primary">
+  <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+    <span>⌂</span>
+    {{ i18n.t('home') }}
+  </a>
+  <a routerLink="/completed" routerLinkActive="active">
+    <span>✓</span>
+    {{ i18n.t('completed') }}
+  </a>
+  <a routerLink="/profile" routerLinkActive="active">
+    <span>●</span>
+    {{ i18n.t('profile') }}
+  </a>
+</nav>
+
+<app-event-form />
+<app-command-palette />
+
+<div class="toasts" aria-live="polite">
+  @for (toast of toasts.toasts(); track toast.id) {
+    <p class="toast" [attr.data-type]="toast.type">{{ toast.message }}</p>
+  }
+</div>
+
+@if (confirm.state(); as dialog) {
+  <div class="overlay" (click)="confirm.answer(false)">
+    <section class="dialog" (click)="$event.stopPropagation()" role="dialog" aria-modal="true">
+      <p>{{ dialog.message }}</p>
+      <div class="dialog-actions">
+        <button type="button" class="ghost-btn" (click)="confirm.answer(false)">
+          {{ i18n.t('cancel') }}
+        </button>
+        <button type="button" class="primary-btn" (click)="confirm.answer(true)">
+          {{ i18n.t('confirmYes') }}
+        </button>
+      </div>
+    </section>
+  </div>
+}

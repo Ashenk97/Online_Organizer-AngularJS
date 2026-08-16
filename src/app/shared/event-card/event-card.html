@@ -1,0 +1,35 @@
+<article
+  class="card"
+  [attr.data-category]="event().category"
+  [attr.data-priority]="event().priority"
+  cdkDrag
+  [cdkDragDisabled]="!draggable()"
+  [cdkDragData]="event()"
+>
+  <div class="card-top">
+    <span class="chip category">{{ categoryLabel(event()) }}</span>
+    <span class="chip status" [attr.data-status]="status()">{{ statusLabel(status()) }}</span>
+  </div>
+
+  <h3>{{ event().name }}</h3>
+  @if (event().description) {
+    <p class="desc">{{ event().description }}</p>
+  }
+  <p class="when">{{ range(event()) }}</p>
+  <p class="meta">
+    <span class="chip priority">{{ i18n.t(event().priority) }}</span>
+    @if (event().location) {
+      <span>{{ event().location }}</span>
+    }
+  </p>
+
+  <div class="actions">
+    <button type="button" class="text-btn" (click)="edit.emit(event())">{{ i18n.t('edit') }}</button>
+    <button type="button" class="text-btn" (click)="toggle.emit(event())">
+      {{ event().completed ? i18n.t('restore') : i18n.t('complete') }}
+    </button>
+    <button type="button" class="text-btn danger" (click)="remove.emit(event())">
+      {{ i18n.t('delete') }}
+    </button>
+  </div>
+</article>

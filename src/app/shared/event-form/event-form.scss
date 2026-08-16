@@ -1,0 +1,150 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  place-items: end center;
+  padding: 1rem;
+  background: color-mix(in srgb, #07090c 62%, transparent);
+  backdrop-filter: blur(8px);
+}
+
+.sheet {
+  width: min(560px, 100%);
+  max-height: min(92vh, 820px);
+  overflow: auto;
+  padding: 1.3rem 1.2rem 1.2rem;
+  border-radius: 24px 24px 18px 18px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-lg);
+  animation: sheet-in 280ms ease;
+}
+
+.sheet h2 {
+  margin: 0 0 1rem;
+  font-family: var(--font-display);
+}
+
+form,
+label {
+  display: grid;
+  gap: 0.35rem;
+}
+
+form {
+  gap: 0.85rem;
+}
+
+input,
+textarea {
+  width: 100%;
+  padding: 0.7rem 0.8rem;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+}
+
+.split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.cats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.45rem;
+}
+
+.cat {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.55rem 0.3rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  cursor: pointer;
+}
+
+.cat input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.cat:has(input:checked) {
+  border-color: var(--cat, var(--accent));
+  background: color-mix(in srgb, var(--cat, var(--accent)) 16%, transparent);
+}
+
+.cat[data-category='work'] {
+  --cat: var(--work);
+}
+.cat[data-category='personal'] {
+  --cat: var(--personal);
+}
+.cat[data-category='health'] {
+  --cat: var(--health);
+}
+.cat[data-category='other'] {
+  --cat: var(--other);
+}
+
+.check {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.check input {
+  width: auto;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+}
+
+em {
+  color: var(--danger);
+  font-style: normal;
+  font-size: 0.85rem;
+}
+
+@keyframes sheet-in {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (min-width: 800px) {
+  .overlay {
+    place-items: center;
+  }
+
+  .sheet {
+    border-radius: 22px;
+  }
+}
+
+@media (max-width: 640px) {
+  .split,
+  .cats {
+    grid-template-columns: 1fr 1fr;
+  }
+}

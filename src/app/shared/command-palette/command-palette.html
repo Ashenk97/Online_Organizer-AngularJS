@@ -1,0 +1,28 @@
+@if (commands.open()) {
+  <div class="overlay" (click)="commands.hide()">
+    <section class="palette" (click)="$event.stopPropagation()" role="dialog" aria-modal="true">
+      <input
+        type="search"
+        [ngModel]="query()"
+        (ngModelChange)="query.set($event); active.set(0)"
+        (keydown.arrowdown)="move(1); $event.preventDefault()"
+        (keydown.arrowup)="move(-1); $event.preventDefault()"
+        (keydown.enter)="run(); $event.preventDefault()"
+        (keydown.escape)="commands.hide()"
+        [placeholder]="i18n.t('commandPlaceholder')"
+        autofocus
+      />
+      <ul>
+        @for (item of items(); track item.id; let i = $index) {
+          <li>
+            <button type="button" [class.active]="i === active()" (click)="run(i)">
+              <span>{{ item.hint && item.id.length > 8 ? item.hint : i18n.t(item.label) }}</span>
+              <small>{{ item.id.length > 8 ? i18n.t('editEvent') : item.hint }}</small>
+            </button>
+          </li>
+        }
+      </ul>
+      <p class="hint">{{ i18n.t('shortcuts') }}</p>
+    </section>
+  </div>
+}

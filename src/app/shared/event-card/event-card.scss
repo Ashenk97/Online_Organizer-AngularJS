@@ -1,0 +1,112 @@
+:host {
+  display: block;
+}
+
+.card {
+  padding: 1.05rem 1.1rem 0.9rem;
+  border-radius: var(--radius);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  animation: rise 420ms ease both;
+}
+
+.card-top,
+.actions {
+  display: flex;
+  gap: 0.45rem;
+}
+
+.card-top {
+  justify-content: space-between;
+  margin-bottom: 0.7rem;
+}
+
+.card h3 {
+  margin: 0 0 0.35rem;
+  font-size: 1.15rem;
+}
+
+.desc,
+.when {
+  margin: 0;
+  color: var(--muted);
+}
+
+.desc {
+  margin-bottom: 0.45rem;
+}
+
+.when,
+.meta {
+  font-size: 0.88rem;
+}
+
+.meta {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin: 0.45rem 0 0;
+  color: var(--muted);
+}
+
+.chip.priority {
+  text-transform: uppercase;
+}
+
+.card[data-priority='high'] {
+  box-shadow: inset 3px 0 0 var(--danger), var(--shadow);
+}
+
+.card.cdk-drag-preview {
+  box-shadow: var(--shadow-lg);
+}
+
+.actions {
+  flex-wrap: wrap;
+  margin-top: 0.85rem;
+}
+
+.chip.category {
+  background: color-mix(in srgb, var(--cat) 18%, transparent);
+  color: var(--cat);
+}
+
+.card[data-category='work'] {
+  --cat: var(--work);
+}
+.card[data-category='personal'] {
+  --cat: var(--personal);
+}
+.card[data-category='health'] {
+  --cat: var(--health);
+}
+.card[data-category='other'] {
+  --cat: var(--other);
+}
+
+.chip.status[data-status='happening'] {
+  background: color-mix(in srgb, var(--accent-2) 20%, transparent);
+  color: var(--accent-2);
+}
+
+.chip.status[data-status='overdue'] {
+  background: color-mix(in srgb, var(--danger) 18%, transparent);
+  color: var(--danger);
+}
+
+.chip.status[data-status='completed'] {
+  background: color-mix(in srgb, var(--ok) 18%, transparent);
+  color: var(--ok);
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

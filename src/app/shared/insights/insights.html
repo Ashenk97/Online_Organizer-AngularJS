@@ -1,0 +1,36 @@
+<section class="insights">
+  <article class="tile ring-tile">
+    <p class="eyebrow">{{ i18n.t('completion') }}</p>
+    <div class="ring-wrap">
+      <svg viewBox="0 0 36 36" aria-hidden="true">
+        <circle cx="18" cy="18" r="15.5"></circle>
+        <circle cx="18" cy="18" r="15.5" [attr.stroke-dasharray]="ring()"></circle>
+      </svg>
+      <strong>{{ completion() }}%</strong>
+    </div>
+  </article>
+
+  <article class="tile">
+    <p class="eyebrow">{{ i18n.t('last7') }}</p>
+    <div class="bars">
+      @for (bar of bars(); track bar.date) {
+        <div class="bar">
+          <span [style.height.%]="(bar.count / maxBar()) * 100"></span>
+          <small>{{ dayLabel(bar.date) }}</small>
+        </div>
+      }
+    </div>
+  </article>
+
+  <article class="tile">
+    <p class="eyebrow">{{ i18n.t('categoryMix') }}</p>
+    <div class="mix">
+      @for (item of categories(); track item.key) {
+        <div class="mix-row" [attr.data-category]="item.key">
+          <span>{{ i18n.t(item.key) }}</span>
+          <b>{{ item.count }}</b>
+        </div>
+      }
+    </div>
+  </article>
+</section>

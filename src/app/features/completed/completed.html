@@ -1,0 +1,25 @@
+<section class="page-head">
+  <p class="eyebrow">{{ i18n.t('brand') }}</p>
+  <h1>{{ i18n.t('completed') }}</h1>
+</section>
+
+@if (events.completedEvents().length === 0) {
+  <div class="empty">
+    <h2>{{ i18n.t('noCompleted') }}</h2>
+    <p>{{ i18n.t('noCompletedHint') }}</p>
+  </div>
+} @else {
+  <div class="cards">
+    @for (event of events.completedEvents(); track event.id) {
+      <app-event-card
+        [event]="event"
+        [now]="now()"
+        [locale]="i18n.locale()"
+        [draggable]="false"
+        (edit)="editor.edit($event)"
+        (remove)="remove($event)"
+        (toggle)="restore($event)"
+      />
+    }
+  </div>
+}

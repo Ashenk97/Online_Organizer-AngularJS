@@ -1,0 +1,113 @@
+:host {
+  display: block;
+  overflow: auto;
+}
+
+.week-head,
+.week-grid {
+  display: grid;
+  grid-template-columns: 52px repeat(7, minmax(88px, 1fr));
+  min-width: 760px;
+}
+
+.day-label {
+  display: grid;
+  justify-items: center;
+  gap: 0.1rem;
+  padding: 0.45rem 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  border-radius: 12px;
+}
+
+.day-label.today strong {
+  color: var(--accent);
+}
+
+.day-label.selected {
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
+}
+
+.hours,
+.col {
+  display: grid;
+  grid-template-rows: repeat(14, 52px);
+}
+
+.hours span,
+.slot {
+  border-top: 1px solid var(--line);
+}
+
+.hours span {
+  color: var(--faint);
+  font-size: 0.7rem;
+  transform: translateY(-0.45rem);
+}
+
+.col {
+  position: relative;
+}
+
+.slot {
+  border: 0;
+  border-top: 1px solid var(--line);
+  background: transparent;
+  cursor: pointer;
+}
+
+.slot:hover {
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+}
+
+.now-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--accent);
+  box-shadow: 0 0 12px var(--accent);
+  pointer-events: none;
+}
+
+.block {
+  position: absolute;
+  left: 4px;
+  right: 4px;
+  border: 0;
+  border-left: 3px solid var(--cat, var(--accent));
+  border-radius: 10px;
+  padding: 0.25rem 0.4rem;
+  background: color-mix(in srgb, var(--cat, var(--accent)) 18%, var(--surface));
+  color: var(--text);
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.block[data-category='work'] {
+  --cat: var(--work);
+}
+.block[data-category='personal'] {
+  --cat: var(--personal);
+}
+.block[data-category='health'] {
+  --cat: var(--health);
+}
+.block[data-category='other'] {
+  --cat: var(--other);
+}
+
+.block strong,
+.block span {
+  display: block;
+}
+
+.block span {
+  color: var(--muted);
+  font-size: 0.72rem;
+}
